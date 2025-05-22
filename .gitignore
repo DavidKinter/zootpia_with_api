@@ -1,0 +1,122 @@
+# Project Name: MasterschoolExcercises
+
+#-----------------------------------------------
+# Editor/IDE specific files
+#-----------------------------------------------
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Other editors
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sublime-project
+*.sublime-workspace
+*~
+*.swp
+*.swo
+
+#-----------------------------------------------
+# Operating System files
+#-----------------------------------------------
+# macOS
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+#-----------------------------------------------
+# Python
+#-----------------------------------------------
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+pyvenv.cfg
+
+# Cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+#-----------------------------------------------
+# JavaScript / Node.js
+#-----------------------------------------------
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+logs/
+
+# Build output
+dist/
+build/
+out/
+# public/  # Uncomment if your /public directory contains only build artifacts and not source files
+
+#-----------------------------------------------
+# Environment variables
+#-----------------------------------------------
+.env
+.env.local
+.env.*
+!.env.example
+!.env.sample
+
+#-----------------------------------------------
+# Testing & coverage
+#-----------------------------------------------
+coverage/
+.nyc_output/
+.coverage
+htmlcov/
+
+#-----------------------------------------------
+# Project specific
+#-----------------------------------------------
+# Timestamped backup zip files
+[0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_*.zip
+
+# Ignore backup script
+create_zipped_backup.py
+create_zipped_backup_raw.py
+# If the script is in a subdirectory, use the path from repo root:
+# backup_script/create_zipped_backup.py
+
+# Other project-specific files
+API_OF_THE_DAY_DEPRECATED/
+My-Zootopia_DEPRECATED/
+
+#-----------------------------------------------
+# Tool specific caches (uncomment as needed)
+#-----------------------------------------------
+# .cache/           # e.g., for Parcel, Gatsby
+# .parcel-cache/    # Parcel 2
+# .webpack/         # Webpack build artifacts
+# *.tsbuildinfo     # TypeScript incremental build info
+# .next/            # Next.js build output
+# .netlify          # Local Netlify folder
