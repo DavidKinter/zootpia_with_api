@@ -77,7 +77,7 @@ def fetch_api_data(
             timeout=REQUEST_TIMEOUT_SECONDS
             )
         response.raise_for_status()  # Raise an HTTPError for bad responses
-        return response.json()
+        return response.json()  # No animals found = [] else [...] (with data)
     except requests.exceptions.RequestException as e:
         print(f"Error: Failed to fetch data from API: {e}")
         return None
@@ -92,10 +92,7 @@ def fetch_animals_data(animal_name: str) \
     data = fetch_api_data("animals", animal_name)
     if data is None:
         return None
-    if len(data) == 0:
-        print(f"No animal data found for '{animal_name}'")
-        return None
-    return data
+    return data  # No animals found = [] else [...] (with data)
 
 
 def process_input(raw_input: str) -> str:
@@ -178,7 +175,7 @@ def process_animals_data(data: Optional[List[Dict[str, Any]]]) \
     Takes API data and returns list of dicts with each animal's formatted
     'name', 'diet', 'first location from the locations list', and 'type'
     """
-    if data is None:  # If None returned upon error
+    if data is None:  # API error occurred - treat same as "no animals found"
         return []  # Empty list to prevent subsequent errors
     animals_list = []
     # Iterates through API data, extracts items, and creates new list of dicts
@@ -205,19 +202,38 @@ def create_animal_html_card(animal_obj: Dict[str, str]) -> str:
     )
 
 
-def generate_animals_html_content(data: Optional[List[Dict[str, Any]]]) -> str:
+def generate_animals_html_content(
+        data: Optional[List[Dict[str, Any]]],
+        animal_name: str
+        ) -> str:
     """
     Creates HTML content string from API data by processing each animal
-    and combining their HTML card representations
+    and combining their HTML card representations. If no animals found,
+    returns a styled error message.
     """
     animals_list = process_animals_data(data)
+    # Check if no animals were found (empty list)
+    if len(animals_list) == 0:
+        return (
+            f'<h2 style="'
+            f'text-align: center; '
+            f'font-size: 30pt; '
+            f'font-weight: normal;"'
+            f'>'
+            f'The animal "{animal_name.title()}" does not exist.'
+            f'</h2>'
+        )
+    # Generate HTML cards for found animals
     animal_html_cards = []
     for animal_obj in animals_list:
         animal_html_cards.append(create_animal_html_card(animal_obj))
     return "\n\n".join(animal_html_cards)
 
 
-def create_final_html(data: Optional[List[Dict[str, Any]]]) -> str:
+def create_final_html(
+        data: Optional[List[Dict[str, Any]]],
+        animal_name: str
+        ) -> str:
     """
     Generates complete HTML content by inserting animal data into the
     placeholder '__REPLACE_ANIMALS_INFO__' in 'animals_template.html'
@@ -235,7 +251,7 @@ def create_final_html(data: Optional[List[Dict[str, Any]]]) -> str:
         return ""  # If no content -> function's contract is to return str
 
     # Generate HTML content for animals and insert into template
-    animals_html_content = generate_animals_html_content(data)
+    animals_html_content = generate_animals_html_content(data, animal_name)
     if HTML_PLACEHOLDER_TEXT in html_template:
         return html_template.replace(
             HTML_PLACEHOLDER_TEXT, animals_html_content
@@ -282,13 +298,12 @@ def main():
     data = fetch_animals_data(animal_name)
 
     # Generates HTML content and saves it to file
-    final_html = create_final_html(data)
-    if final_html and data:
+    final_html = create_final_html(data, animal_name)
+    if final_html:
         save_html_to_file(final_html)
     else:
         print(
-            f"HTML content generation failed, no data available, or resulted "
-            f"in empty content. "
+            f"HTML content generation failed or resulted in empty content. "
             f"Skipping save to {OUTPUT_HTML_FILE}."
             )
 
